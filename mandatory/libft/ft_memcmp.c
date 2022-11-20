@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   paths_parsing.c                                    :+:      :+:    :+:   */
+/*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/22 08:53:30 by sydauria          #+#    #+#             */
-/*   Updated: 2022/09/22 08:56:47 by sydauria         ###   ########.fr       */
+/*   Created: 2021/12/03 05:49:57 by sydauria          #+#    #+#             */
+/*   Updated: 2021/12/20 01:07:35 by sydauria         ##   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "pipex.h"
+#include "libft.h"
 
-int	search_path(char *commands, char *paths[])
+int	ft_memcmp(const void *ptr1, const void *ptr2, size_t size)
 {
-	int		i;
-	char	*path_copy;
-
-	i = 0;
-	
-	
+	if (!size)
+		return (0);
+	while ((*(unsigned char *) ptr1) == (*(unsigned char *) ptr2) && --size)
+	{
+		ptr1++;
+		ptr2++;
+	}
+	return (*(unsigned char *) ptr1 - (*(unsigned char *) ptr2));
 }

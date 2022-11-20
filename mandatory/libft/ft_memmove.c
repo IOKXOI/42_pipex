@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/22 08:25:28 by sydauria          #+#    #+#             */
-/*   Updated: 2022/09/22 08:52:39 by sydauria         ###   ########.fr       */
+/*   Created: 2021/12/02 23:18:02 by sydauria          #+#    #+#             */
+/*   Updated: 2021/12/20 01:08:00 by sydauria         ##   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-
-int	exec(char *commands[], char *argv[], char *paths[])
+void	*ft_memmove(void *dest, const void *src, size_t size)
 {
-	int	i = 0;
+	size_t	i;
 
-	while ((argc - 3) - i)
+	if (!dest && !src)
+		return (NULL);
+	i = 0;
+	while (src > dest && size--)
 	{
-		search_path(commands[i], paths);
-		fork()
+		*(unsigned char *)(dest + i) = *(unsigned char *)(src + i);
+		i++;
 	}
+	while (dest > src && size--)
+		*(unsigned char *)(dest + size) = *(unsigned char *)(src + size);
+	return (dest);
 }

@@ -1,0 +1,3 @@
+[submodule "mandatory/mandatory/pipex-tester"]
+	path = mandatory/mandatory/pipex-tester
+	url = git@github.com:vfurmane/pipex-tester.git
