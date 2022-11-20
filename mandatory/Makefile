@@ -3,20 +3,20 @@ CC=gcc
 CFLAGS=-Wall -Werror -Wextra -MMD -g3
 SRCDIR= srcs/
 OBJSDIR=./objs/
-BUILD = build
+BUILD =build
 INCLUDES =./includes
 LIBFT = ./libft
 
 SRC_PARSING=$(addprefix parsing/, \
 					paths_parsing.c \
-					check.c)
+					check.c \
+					pid.c)
 
 SRC_CHAIN_LIST=$(addprefix chain_list/, \
 				create_list.c)
 				
 SRC_EXEC=$(addprefix exec/, \
-			exec.c \
-			exec2.c)
+			exec.c)
 
 SRC_FREE=$(addprefix free/, \
 			error.c \

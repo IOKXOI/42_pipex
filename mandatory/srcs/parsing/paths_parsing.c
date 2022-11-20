@@ -3,33 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   paths_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iok <iok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 08:53:30 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/13 00:45:37 by iok              ###   ########.fr       */
+/*   Updated: 2022/11/20 20:42:51 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	*init_pid_register(int argc, t_elements *elements)
+static char	**get_paths(char **paths, t_elements *elements)
 {
-	int *pid_register;
-	int	nb_commands;
+	int		i;
+	char	*tmp;
 
-	nb_commands = argc - 3;
-
-	pid_register = malloc(sizeof(int) * nb_commands);
-	if (!pid_register)
-		error("Malloc: impossible to create pid_register", elements);
-	return (pid_register);
+	i = 0;
+	while (paths[i])
+	{
+		tmp = paths[i];
+		paths[i] = ft_strjoin(paths[i], "/");
+		if (!paths[i])
+			error("parse_paths : ft_strjoin", elements);
+		free(tmp);
+		i++;
+	}
+	return (paths);
 }
 
 static char	**parse_paths(char *envp[], t_elements *elements)
 {
 	int		i;
 	char	**paths;
-	char	*tmp;
 
 	i = 0;
 	while (envp[i] && ((envp[i][0] != 'P') || (envp[i][1] != 'A')
@@ -40,20 +44,7 @@ static char	**parse_paths(char *envp[], t_elements *elements)
 	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
 		error("parse_paths : ft_split", elements);
-	i = 0;
-	while (paths[i])
-	{
-		tmp = paths[i];
-		paths[i] = ft_strjoin(paths[i], "/");
-		if (!paths[i])
-		{
-			
-		}
-		if (!paths[i])
-			error("parse_paths : ft_strjoin", elements);
-		free(tmp);
-		i++;
-	}
+	paths = get_paths(paths, elements);
 	return (paths);
 }
 
@@ -96,7 +87,7 @@ static t_commands	*parse_commands(char *argv[], t_elements *elements)
 	return (elements->first);
 }
 
-void	init_struct(int argc, char *argv[], char *envp[], t_elements *elements)
+void	init_struct(int argc, char *argv[], char *env[], t_elements *elements)
 {
 	elements->argc = argc;
 	elements->here_doc = NULL;
@@ -105,7 +96,7 @@ void	init_struct(int argc, char *argv[], char *envp[], t_elements *elements)
 	elements->pid_register = NULL;
 	check_argv(argc, argv);
 	elements->node_commands = parse_commands(argv, elements);
-	elements->paths = parse_paths(envp, elements);
+	elements->paths = parse_paths(env, elements);
 	elements->files = parse_files(argv, elements);
 	elements->pid_register = init_pid_register(argc, elements);
 }

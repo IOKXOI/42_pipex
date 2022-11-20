@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iok <iok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 00:33:55 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 13:46:29 by iok              ###   ########.fr       */
+/*   Updated: 2022/11/20 20:49:02 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ typedef struct s_elements
 }	t_elements;
 
 // PARSING ////////////////////////////////////////////////////////////////////
-void	init_struct(int argc, char *argv[], char *envp[], t_elements *elements);
+void	init_struct(int argc, char *argv[], char *env[], t_elements *elements);
+int		*init_pid_register(int argc, t_elements *elements);
 //char	**get_commands(int argc, char *argv[]);
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -53,6 +54,7 @@ int		forking(t_elements *elements, char *envp[]);
 void	ft_child(char *commands, t_commands *node, char **envp, t_elements *e);
 void	ft_parent(char *commands, t_elements *elements);
 void	process(char *commands, t_commands *node, char *envp[], t_elements *e);
+int		wait_id(t_elements *elements);
 ///////////////////////////////////////////////////////////////////////////////
 
 // CHECK //////////////////////////////////////////////////////////////////////
@@ -66,7 +68,7 @@ void	new_node(t_elements *elements);
 
 // FREE ///////////////////////////////////////////////////////////////////////
 void	error(char *str, t_elements *elements);
-void	error_127(char *str, t_elements *elements);
+void	error_127(t_elements *elements);
 void	free_paths(char **paths);
 void	free_this_node(t_commands *node, t_elements *elements);
 void	free_list(t_commands *node);

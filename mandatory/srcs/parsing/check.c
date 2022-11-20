@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iok <iok@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 05:05:57 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 14:09:12 by iok              ###   ########.fr       */
+/*   Updated: 2022/11/20 20:48:09 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,35 +21,41 @@ char	*commands_errors(char **commands)
 	return (NULL);
 }	
 
-char	*try_to_access(char **commands, t_elements *elements)
+char	*get_good_paths(char **commands, t_elements *elements)
 {
 	int		i;
 	char	*paths;
 
 	i = 0;
-	if (!access(commands[0], F_OK | X_OK))
-		return (ft_strdup(commands[0]));
-	else if (elements->paths)
+	paths = ft_strjoin(elements->paths[i], commands[0]);
+	if (!paths)
+		perror("try_to_access: ft_strjoin");
+	while (access(paths, F_OK))
 	{
+		i++;
+		free(paths);
+		if (!elements->paths[i])
+		{
+			if (!access(commands[0], F_OK | X_OK))
+				return (commands[0]);
+			else
+				return (commands_errors(commands));
+		}
 		paths = ft_strjoin(elements->paths[i], commands[0]);
 		if (!paths)
 			perror("try_to_access: ft_strjoin");
-		while (access(paths, F_OK))
-		{
-			i++;
-			free(paths);
-			if (!elements->paths[i])
-			{
-				if (!access(commands[0],  F_OK | X_OK))
-					return (commands[0]);
-				else
-					return (commands_errors(commands));
-			}
-			paths = ft_strjoin(elements->paths[i], commands[0]);
-			if (!paths)
-				perror("try_to_access: ft_strjoin");
-		}
 	}
+	return (paths);
+}
+
+char	*try_to_access(char **commands, t_elements *elements)
+{
+	char	*paths;
+
+	if (!access(commands[0], F_OK | X_OK))
+		return (ft_strdup(commands[0]));
+	else if (elements->paths)
+		paths = get_good_paths(commands, elements);
 	return (paths);
 }
 
@@ -70,9 +76,6 @@ void	check_argv(int argc, char *argv[])
 				if (i == argc - 1)
 					perror("Parse error:");
 			}
-			else
-				perror("");
-			//exit(EXIT_FAILURE);
 		}
 		i++;
 	}
