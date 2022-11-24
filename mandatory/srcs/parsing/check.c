@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 05:05:57 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/24 04:21:06 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 06:23:12 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,30 @@ char	*get_good_paths(char **commands, t_elements *elements)
 char	*try_to_access(char **commands, t_elements *elements)
 {
 	char	*paths;
-
+	
 	if (!commands[0])
 		error_127(elements);
-	if (!access(commands[0], F_OK | X_OK))
-		return (ft_strdup(commands[0]));
-	else if (elements->paths)
-		paths = get_good_paths(commands, elements);
+	if (commands[0][0] == '.' && !commands[0][1])
+			error_printf\
+(".: filename argument required\n.: usage: . filename [arguments]\n"\
+, elements);
+	if (ft_strrchr(commands[0], '/'))// no such file directory
+	{
+		if(open(commands[0], O_DIRECTORY) < 0)
+			return (commands[0]);
+		else
+			error_directory(commands[0], elements);
+	}
+	if (!elements->paths) //    ..    .      
+	{
+		if (commands[0][0] == '.' && commands[0][1] == '.')
+			error_printf("..: Is a directory", elements);
+		if (access(commands[0], F_OK | X_OK))
+			return(commands[0]);
+	}
+	if (commands[0][0] == '.' && commands[0][1] == '.')
+			error_printf("..: command not found", elements);
+	paths = get_good_paths(commands, elements);
 	return (paths);
 }
 /*

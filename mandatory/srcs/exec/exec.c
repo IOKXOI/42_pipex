@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 08:25:28 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/24 03:05:49 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 05:13:57 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ void	child_process(t_commands *node, char **envp, t_elements *e)
 		close(e->pipefd[0]);
 		close(e->pipefd[1]);
 		if (execve(commands, node->commands, envp) == -1)
-		{
-			free(commands);
-			error("exec error", e);
-		}
+			error(node->commands[0], e);
 	}
 	close(e->pipefd[0]);
 	close(e->pipefd[1]);
