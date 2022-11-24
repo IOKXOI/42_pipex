@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 08:53:30 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 20:42:51 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/21 08:08:04 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	init_struct(int argc, char *argv[], char *env[], t_elements *elements)
 	elements->paths = NULL;
 	elements->first = NULL;
 	elements->pid_register = NULL;
-	check_argv(argc, argv);
+	//check_argv(argc, argv);
 	elements->node_commands = parse_commands(argv, elements);
 	elements->paths = parse_paths(env, elements);
 	elements->files = parse_files(argv, elements);

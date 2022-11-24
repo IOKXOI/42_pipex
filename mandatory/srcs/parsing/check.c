@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 05:05:57 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 20:48:09 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 04:21:06 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,15 @@ char	*try_to_access(char **commands, t_elements *elements)
 {
 	char	*paths;
 
+	if (!commands[0])
+		error_127(elements);
 	if (!access(commands[0], F_OK | X_OK))
 		return (ft_strdup(commands[0]));
 	else if (elements->paths)
 		paths = get_good_paths(commands, elements);
 	return (paths);
 }
-
+/*
 void	check_argv(int argc, char *argv[])
 {
 	int	i;
@@ -66,17 +68,16 @@ void	check_argv(int argc, char *argv[])
 	i = 0;
 	while (argv[i])
 	{
-		if (!*argv[i])
+		if (*argv[i])
 		{
 			access(argv[i], F_OK);
 			if (i == 1 || i == argc - 1)
 			{
 				if (i == 1)
 					ft_printf("%s: ");
-				if (i == argc - 1)
-					perror("Parse error:");
 			}
 		}
 		i++;
 	}
 }
+*/

@@ -6,71 +6,72 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 08:25:28 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 20:49:15 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 03:05:49 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	first_cmd(char *commands, int *pipefd, t_elements *elements)
+static char	*first_cmd(char **commands, int *pipefd, t_elements *elements)
 {
-	int	fd;
-
+	int		fd;
+	char	*good_commands;
+	
 	fd = open(elements->files[0], O_RDONLY);
 	if (fd < 0)
 	{
-		free(commands);
-		error(elements->files[0], elements);
+		if (*elements->files[0])
+			error(elements->files[0], elements);
+		else
+			error(" ", elements);
 	}
+	good_commands = try_to_access(commands, elements);
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
-		free(commands);
+		free(good_commands);
 		error("first_cmd: dup2", elements);
 	}
 	close(fd);
 	if (dup2(pipefd[1], STDOUT_FILENO) < 0)
 	{
-		free(commands);
+		free(good_commands);
 		error("first_cmd: dup2", elements);
 	}
 	close(pipefd[1]);
 	close(pipefd[0]);
+	return(good_commands);
 }
 
-static void	last_cmd(char *commands, int *pipefd, t_elements *elements)
+static char	*last_cmd(char **commands, int *pipefd, t_elements *elements)
 {
-	int	new_fd;
+	int		new_fd;
+	char	*good_commands;
 
 	close(pipefd[1]);
 	if (dup2(pipefd[0], STDIN_FILENO) < 0)
-	{
-		free(commands);
 		error("last_cmd: dup2", elements);
-	}
 	new_fd = open(elements->files[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (new_fd == -1)
-	{
-		free(commands);
-		error("last_cmd: open", elements);
-	}
+		error(elements->files[1], elements);
+	good_commands = try_to_access(commands, elements);
 	if (dup2(new_fd, STDOUT_FILENO) < 0)
 	{
-		free(commands);
+		free(good_commands);
 		error("last_cmd: dup2", elements);
 	}
 	close(pipefd[0]);
 	close(new_fd);
+	return(good_commands);
 }
 
 void	child_process(t_commands *node, char **envp, t_elements *e)
 {
 	char		*commands;
 
-	commands = try_to_access(node->commands, e);
 	if (node == e->first)
-		first_cmd(commands, e->pipefd, e);
+		commands = first_cmd(node->commands, e->pipefd, e);
 	else
-		last_cmd(commands, e->pipefd, e);
+		commands = last_cmd(node->commands, e->pipefd, e);
 	if (commands)
 	{
 		close(e->pipefd[0]);
@@ -104,6 +105,8 @@ int	forking(t_elements *elements, char *envp[])
 	while (node)
 	{
 		elements->pid_register[i] = fork();
+		if (elements->pid_register[i] < 0)
+			error("Error on fork", elements);
 		if (elements->pid_register[i] < 0)
 			error("Forking", elements);
 		else if (elements->pid_register[i] == 0)

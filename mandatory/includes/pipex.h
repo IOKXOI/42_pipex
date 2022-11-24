@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 00:33:55 by sydauria          #+#    #+#             */
-/*   Updated: 2022/11/20 20:49:02 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 03:11:22 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,13 @@ void	new_node(t_elements *elements);
 
 // FREE ///////////////////////////////////////////////////////////////////////
 void	error(char *str, t_elements *elements);
+void	error_printf(t_elements *elements);
 void	error_127(t_elements *elements);
 void	free_paths(char **paths);
 void	free_this_node(t_commands *node, t_elements *elements);
 void	free_list(t_commands *node);
 void	free_files(char **files);
+void	error_empty_cmd(char *cmd, t_elements *elements);
 ///////////////////////////////////////////////////////////////////////////////
 
 // BONUS///////////////////////////////////////////////////////////////////////
