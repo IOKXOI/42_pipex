@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+         #
+#    By: iok <iok@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/25 05:59:28 by sydauria          #+#    #+#              #
-#    Updated: 2022/10/15 18:41:05 by sydauria         ###   ########.fr        #
+#    Updated: 2022/10/20 18:05:58 by iok              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,12 +27,14 @@ BONUS = ft_lstnew.c ft_lstsize.c ft_lstlast.c ft_lstadd_front.c \
 
 GNL = ./gnl/get_next_line.c ./gnl/get_next_line_utils.c 
 
+PRINTF = ./ft_printf/converter_itoas.c ./ft_printf/ft_printf.c \
+			./ft_printf/utils.c ./ft_printf/converter.c
+
 NAME=libft.a
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-
-SRC = $(CHAR) $(STR) $(MEM) $(FD) $(GNL)
+SRC = $(CHAR) $(STR) $(MEM) $(FD) $(GNL) $(PRINTF)
 OBJ= $(SRC:.c=.o)
 BONUS_OBJS	= ${BONUS:.c=.o}
 

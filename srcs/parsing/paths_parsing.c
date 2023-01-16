@@ -6,27 +6,17 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 08:53:30 by sydauria          #+#    #+#             */
-/*   Updated: 2022/10/17 20:52:08 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/21 08:08:04 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static char	**parse_paths(char *envp[], t_elements *elements)
+static char	**get_paths(char **paths, t_elements *elements)
 {
 	int		i;
-	char	**paths;
 	char	*tmp;
 
-	i = 0;
-	while (envp[i] && ((envp[i][0] != 'P') || (envp[i][1] != 'A')
-		|| (envp[i][2] != 'T') || (envp[i][3] != 'H') || (envp[i][4] != '=')))
-		i++;
-	if (!envp[i])
-		return (NULL);
-	paths = ft_split(envp[i] + 5, ':');
-	if (!paths)
-		error("parse_paths : ft_split", elements);
 	i = 0;
 	while (paths[i])
 	{
@@ -37,6 +27,24 @@ static char	**parse_paths(char *envp[], t_elements *elements)
 		free(tmp);
 		i++;
 	}
+	return (paths);
+}
+
+static char	**parse_paths(char *envp[], t_elements *elements)
+{
+	int		i;
+	char	**paths;
+
+	i = 0;
+	while (envp[i] && ((envp[i][0] != 'P') || (envp[i][1] != 'A')
+		|| (envp[i][2] != 'T') || (envp[i][3] != 'H') || (envp[i][4] != '=')))
+		i++;
+	if (!envp[i])
+		return (NULL);
+	paths = ft_split(envp[i] + 5, ':');
+	if (!paths)
+		error("parse_paths : ft_split", elements);
+	paths = get_paths(paths, elements);
 	return (paths);
 }
 
@@ -79,14 +87,16 @@ static t_commands	*parse_commands(char *argv[], t_elements *elements)
 	return (elements->first);
 }
 
-void	init_struct(int argc, char *argv[], char *envp[], t_elements *elements)
+void	init_struct(int argc, char *argv[], char *env[], t_elements *elements)
 {
 	elements->argc = argc;
 	elements->here_doc = NULL;
 	elements->paths = NULL;
 	elements->first = NULL;
-	check_argv(argc, argv);
+	elements->pid_register = NULL;
+	//check_argv(argc, argv);
 	elements->node_commands = parse_commands(argv, elements);
-	elements->paths = parse_paths(envp, elements);
+	elements->paths = parse_paths(env, elements);
 	elements->files = parse_files(argv, elements);
+	elements->pid_register = init_pid_register(argc, elements);
 }

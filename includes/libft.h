@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
+/*   By: iok <iok@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 04:35:12 by sydauria          #+#    #+#             */
-/*   Updated: 2022/10/16 17:59:49 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/10/20 17:58:14 by iok              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,23 @@
 
 # include<unistd.h>
 # include<stdlib.h>
-# include <errno.h>
-# include <stdio.h>
+# include<errno.h>
+# include<stdio.h>
+# include<stdarg.h>
 
 typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_struct
+{
+	int		null_char;
+	size_t	form_offset;
+	size_t	buff_offset;
+	size_t	wrote;
+}	t_struct;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -76,5 +85,17 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 char	*get_next_line(int fd);
+
+//FT_PRINTF//////////////////////////////////////////////////////////////////
+int		ft_printf(const char *format, ...);
+int		check_format(const char *format);
+char	*printf_strdup(char *src);
+char	*printf_strndup(const char *src, int n);
+char	*ft_itoa(int n);
+char	*ft_itoa_base(int n, char *base);
+char	*ft_itoa_u(size_t n);
+char	*ft_itoa_base_u(size_t n, char *base);
+char	*converter(const char *format, t_struct *data, va_list args);
+////////////////////////////////////////////////////////////////////////////
 
 #endif

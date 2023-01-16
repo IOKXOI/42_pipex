@@ -6,7 +6,7 @@
 /*   By: sydauria <sydauria@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 00:33:55 by sydauria          #+#    #+#             */
-/*   Updated: 2022/10/17 21:36:46 by sydauria         ###   ########.fr       */
+/*   Updated: 2022/11/24 06:09:03 by sydauria         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct s_commands
 {
 	char				**commands;
+	int					pid;
 	struct s_commands	*next;
 }	t_commands;
 
@@ -33,6 +34,7 @@ typedef struct s_elements
 {
 	int			argc;
 	int			pipefd[3];
+	int			*pid_register;
 	char		*here_doc;
 	char		**paths;
 	char		**files;
@@ -42,15 +44,17 @@ typedef struct s_elements
 }	t_elements;
 
 // PARSING ////////////////////////////////////////////////////////////////////
-void	init_struct(int argc, char *argv[], char *envp[], t_elements *elements);
+void	init_struct(int argc, char *argv[], char *env[], t_elements *elements);
+int		*init_pid_register(int argc, t_elements *elements);
 //char	**get_commands(int argc, char *argv[]);
 ///////////////////////////////////////////////////////////////////////////////
 
 // EXEC ///////////////////////////////////////////////////////////////////////
-void	forking(t_elements *elements, char *envp[]);
+int		forking(t_elements *elements, char *envp[]);
 void	ft_child(char *commands, t_commands *node, char **envp, t_elements *e);
-void	ft_parent(int pid, char *commands, t_elements *elements);
+void	ft_parent(char *commands, t_elements *elements);
 void	process(char *commands, t_commands *node, char *envp[], t_elements *e);
+int		wait_id(t_elements *elements);
 ///////////////////////////////////////////////////////////////////////////////
 
 // CHECK //////////////////////////////////////////////////////////////////////
@@ -64,10 +68,14 @@ void	new_node(t_elements *elements);
 
 // FREE ///////////////////////////////////////////////////////////////////////
 void	error(char *str, t_elements *elements);
+void	error_printf(char *str, t_elements *elements);
+void	error_127(t_elements *elements);
 void	free_paths(char **paths);
 void	free_this_node(t_commands *node, t_elements *elements);
 void	free_list(t_commands *node);
 void	free_files(char **files);
+void	error_empty_cmd(char *cmd, t_elements *elements);
+void	error_directory(char *cmd, t_elements *elements);
 ///////////////////////////////////////////////////////////////////////////////
 
 // BONUS///////////////////////////////////////////////////////////////////////
